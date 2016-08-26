@@ -16,11 +16,10 @@
 
 from .app import init
 from .app import run
-
-# Currently views are registered at import time.
-from .view import *
-
+from .view import Views
 
 def main():
-    init()
+    app = init()
+    for view in Views():
+        view.register(app)
     run(debug=True)

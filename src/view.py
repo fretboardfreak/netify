@@ -14,12 +14,28 @@
 
 """Flask view objects for the netify app."""
 
-from .app import APP
+from flask.views import View
 
+from .app import APP
 from .template import render_template
 from .template import HtmlPage
 
 
-@APP.route('/')
-def index():
-    return render_template(HtmlPage(head=None, body='Hello World').build())
+class Views(list):
+    def __init__(self):
+        super(Views, self).__init__([Index])
+
+
+class Index(View):
+    name = 'index'
+    default_route = '/'
+
+    @classmethod
+    def register(cls, app, route=None):
+        if not route:
+            route = cls.default_route
+        app.add_url_rule(route, view_func=cls.as_view(cls.name))
+
+    def dispatch_request(self):
+        return render_template(HtmlPage(head=None,
+                                        body='Hello World').build())

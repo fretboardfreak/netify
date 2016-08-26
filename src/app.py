@@ -14,8 +14,12 @@
 
 """The netify application object."""
 
+import os
+
 from flask import Flask
+
+DEFAULT_SECRET_KEY_SIZE = 64  # bytes -> 64 * 8 = 512bits
 
 APP = Flask(__name__)
 APP.config.from_object(__name__)
-APP.config.update(dict(SECRET_KEY='abcdefghijklmnopqrstuvwxyz'))
+APP.config.update(dict(SECRET_KEY=os.urandom(DEFAULT_SECRET_KEY_SIZE)))

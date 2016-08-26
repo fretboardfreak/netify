@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Copyright 2015 Curtis Sand
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""The netify CLI script."""
+"""A module containing the main CLI frontend code."""
 
-try:  # use installed netify package if available
-    import netify
-except ImportError:  # use src package in repository instead
-    import src as netify
+from .app import APP
 
+# Currently views are registered at import time.
+from .view import *
 
-if __name__ == "__main__":
-    netify.main()
+def main():
+    APP.run(debug=True)

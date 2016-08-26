@@ -1,3 +1,3 @@
-from .netify_app import main
+from .main import main
 
 __ALL__ = [main]

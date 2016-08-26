@@ -14,10 +14,13 @@
 
 """A module containing the main CLI frontend code."""
 
-from .app import APP
+from .app import init
+from .app import run
 
 # Currently views are registered at import time.
 from .view import *
 
+
 def main():
-    APP.run(debug=True)
+    init()
+    run(debug=True)

@@ -2,11 +2,10 @@
 Netify
 ======
 
-The goals of Netify are to:
+*Turn boring things into something for the net*
 
-#. Represent a set of RST files as a website.
-#. Support static HTML file output as well as ability to serve a live version
-   of the sources.
+The goal of Netify is to provide a solid structure as well as useful tools for
+starting up a new `Flask <http://flask.pocoo.org/>`_ project quickly.
 
 License
 =======

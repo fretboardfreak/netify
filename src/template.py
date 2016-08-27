@@ -1,3 +1,4 @@
+"""Generate Jinja2 Templates and/or HTML pages programmatically."""
 # Copyright 2015 Curtis Sand
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,9 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Generate Jinja2 Templates and/or HTML pages programmatically."""
-
 from flask import Markup
 from flask import render_template_string
 from yattag import Doc
@@ -33,12 +31,10 @@ def render_template(template):
 
 class Page(object):
     """Base object for pages."""
-    def __init__(self, content):
-        if content is not None:
-            self.content = content
-
     def build(self):
-        raise NotImplemented('Must be implemented by subclass.')
+        """Build the page template string."""
+        raise NotImplementedError('%s: Must be implemented by subclass.' %
+                                  self.__class__.__name__)
 
     def __call__(self, *args, **kwargs):
         self.__class__.__init__(self, *args, **kwargs)
@@ -63,6 +59,8 @@ class HtmlPage(Page):
             self.head = head
         if body is not None:
             self.body = body
+        self.head_txt = None
+        self.body_txt = None
 
     def _get_text(self):
         """Convert possible yattag.Doc objects to strings."""

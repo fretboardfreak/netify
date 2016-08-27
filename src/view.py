@@ -21,20 +21,24 @@ from .template import HtmlPage
 
 
 class Views(list):
+    """A list of view classes available in this module."""
     def __init__(self):
         super(Views, self).__init__([Index])
 
 
 class Index(View):
+    """The index view."""
     name = 'index'
     default_route = '/'
 
     @classmethod
     def register(cls, app, route=None):
+        """Register the view on the flask application."""
         if not route:
             route = cls.default_route
         app.add_url_rule(route, view_func=cls.as_view(cls.name))
 
     def dispatch_request(self):
+        """Handle an incoming request for a route registered to this View."""
         return render_template(HtmlPage(head=None,
                                         body='Hello World').build())

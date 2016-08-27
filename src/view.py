@@ -16,7 +16,6 @@
 
 from flask.views import View
 
-from .app import APP
 from .template import render_template
 from .template import HtmlPage
 

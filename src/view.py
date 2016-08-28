@@ -17,9 +17,11 @@
 from enum import Enum
 
 from flask.views import View
+from yattag import Doc
 
 from .template import render_template
 from .template import HtmlPage
+from .template import dict_to_html_list
 
 
 class HelloWorldIndex(View):
@@ -42,8 +44,35 @@ class HelloWorldIndex(View):
 
     def dispatch_request(self):
         """Handle an incoming request for a route registered to this View."""
+        hello_world = 'Hello World From Netify'
+        if not self.debug:
+            body_txt = hello_world
+        else:  # add the debug div to the bottom of the page
+            body = Doc()
+            body.text(hello_world)
+            body.stag('hr')
+            body.asis(self.debug_div)
+            body_txt = body.getvalue()
         return render_template(HtmlPage(
-            head=None, body='Hello World From Netify').build())
+            head=None, body=body_txt).build())
+
+    @property
+    def debug_div(self):
+        """Generate a div section containing debugging information."""
+        config_dict = self.netify_app.config.to_string_dict()
+        div = Doc()
+        with div.tag('div'):
+            div.attr(klass="debug")
+            div.text('DEBUG:')
+            div.stag('br')
+            div.text('Netify Config File:')
+            div.stag('br')
+            div.asis(dict_to_html_list(config_dict))
+            div.stag('br')
+            div.text('Flask Config')
+            div.stag('br')
+            div.asis(dict_to_html_list(dict(self.netify_app.flask_app.config)))
+        return div.getvalue()
 
 
 class Views(Enum):

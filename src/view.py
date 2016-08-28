@@ -40,5 +40,5 @@ class Index(View):
 
     def dispatch_request(self):
         """Handle an incoming request for a route registered to this View."""
-        return render_template(HtmlPage(head=None,
-                                        body='Hello World').build())
+        return render_template(HtmlPage(
+            head=None, body='Hello World From Netify').build())

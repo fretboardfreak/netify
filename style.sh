@@ -17,4 +17,10 @@
 echo "[PEP8]"
 find . -iname "*py" -exec pep8 '{}' '+'
 echo "[Pylint]"
-pylint --disable=too-few-public-methods src
+PYLINT_OPTS=""
+pylint $PYLINT_OPTS -r no src 2>/dev/null
+
+# Rerun pylint with full report but I only care about the rating.
+echo -en "  "
+pylint $PYLINT_OPTS -r yes src 2>/dev/null | \
+    grep "Your code has been rated at"

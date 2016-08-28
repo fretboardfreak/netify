@@ -20,6 +20,7 @@ from enum import Enum
 class Section(Enum):
     """String names for the sections in the Netify config file"""
     flask = 'flask'
+    netify_views = 'netify_views'
 
 
 class Config(object):
@@ -64,6 +65,29 @@ class Config(object):
     def update_flask(self, flask_app):
         """Add the options from the Flask section into the flask object."""
         flask_app.config.update(self.flask_config_dict)
+
+    def _section_as_dict(self, section):
+        views = {}
+        for option in self.parser.options(section):
+            # Don't know which options might be boolean so we can't use
+            # self.parser.getboolean()
+            tmp = self.get(section, option)
+            if str(tmp).lower() in ['yes', 'y', 'true', 't']:
+                views[option] = True
+            elif str(tmp).lower() in ['no', 'n', 'false', 'f']:
+                views[option] = False
+            else:
+                views[option] = str(tmp)
+        return views
+
+    @property
+    def netify_views(self):
+        """Get the 'netify_views' section."""
+        return self._section_as_dict(Section.netify_views.value)
+
+    def get_page_options(self, name):
+        """Return a dict of options for a page."""
+        return self._section_as_dict(name)
 
 
 class FlaskDefaults(Enum):

@@ -19,7 +19,6 @@ from enum import Enum
 from flask.views import View
 from yattag import Doc
 
-from .template import render_template
 from .template import HtmlPage
 from .template import dict_to_html_list
 
@@ -53,8 +52,7 @@ class HelloWorldIndex(View):
             body.stag('hr')
             body.asis(self.debug_div)
             body_txt = body.getvalue()
-        return render_template(HtmlPage(
-            head=None, body=body_txt).build())
+        return HtmlPage(head=None, body=body_txt).render_template()
 
     @property
     def debug_div(self):

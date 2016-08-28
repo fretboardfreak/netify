@@ -20,15 +20,31 @@ class NetifyApp(object):
     flask_app = None
 
     def __init__(self, config=None):
-        if self.flask_app is None:
+        if self.flask_app is None:  # First time init
             self.__class__.flask_app = Flask(__name__)
-        if config and self.flask_app:
-            config.update_flask(self.flask_app)
+            self.registered_views = []
+            if config:
+                self.config = config
+                self.config.update_flask(self.flask_app)
 
     def register_views(self, views):
-        """Register the view classes against the flask app."""
+        """Register the view classes against the flask app.
+
+        The "Method" name registered in the Flask app is the "name" field for
+        each View class.
+        """
+        view_config = self.config.netify_views
+        enabled = [name.strip() for name in view_config['enabled'].split(',')]
         for view in views:
-            view.register(self.flask_app)
+            view_cls = view.value
+            if view.name in enabled:
+                if view_cls.name in self.registered_views:
+                    self.flask_app.logger.warning(
+                        'Not Registering view %s. A view has already '
+                        'been registered for %s.' % (view.name, view_cls.name))
+                view_opts = self.config.get_page_options(view_cls.name)
+                view_cls.register(self, **view_opts)
+                self.registered_views.append(view_cls.name)
 
     def run(self, host=None, port=None, debug=None):
         """Run the Flask Server."""

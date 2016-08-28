@@ -46,6 +46,19 @@ class Config(object):
         """Get an Option from one of the Config Sections."""
         return self.parser.get(*args, **kwargs)
 
+    def to_string_dict(self):
+        """Return the whole config as a dictionary of string key values.
+
+        All keys and values are strings, as written int he config file.
+        """
+        ret_val = {}
+        for section in self.parser.sections():
+            for option in self.parser.options(section):
+                sect = ret_val.get(section, {})
+                sect[option] = self.parser.get(section, option)
+                ret_val[section] = sect
+        return ret_val
+
     @classmethod
     def get_random_secret_key(cls, size=None):
         """Generate a random secret key string."""

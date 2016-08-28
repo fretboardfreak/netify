@@ -21,5 +21,5 @@ def main():
     """The main method for the Netify application."""
     config = Config.load_config('/home/csand/netify/dev.cfg')
     netify_app = NetifyApp(config)
-    netify_app.register_views(Views())
+    netify_app.register_views(Views)
     netify_app.run(debug=True)

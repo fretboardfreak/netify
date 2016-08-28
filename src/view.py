@@ -14,31 +14,38 @@
 
 """Flask view objects for the netify app."""
 
+from enum import Enum
+
 from flask.views import View
 
 from .template import render_template
 from .template import HtmlPage
 
 
-class Views(list):
-    """A list of view classes available in this module."""
-    def __init__(self):
-        super(Views, self).__init__([Index])
-
-
-class Index(View):
+class HelloWorldIndex(View):
     """The index view."""
     name = 'index'
     default_route = '/'
 
+    def __init__(self, netify_app, debug=False):
+        self.netify_app = netify_app
+        self.debug = debug
+
     @classmethod
-    def register(cls, app, route=None):
+    def register(cls, netify, route=None, *args, **kwargs):
         """Register the view on the flask application."""
         if not route:
             route = cls.default_route
-        app.add_url_rule(route, view_func=cls.as_view(cls.name))
+        netify.flask_app.add_url_rule(
+            route, view_func=cls.as_view(cls.name, netify_app=netify,
+                                         *args, **kwargs))
 
     def dispatch_request(self):
         """Handle an incoming request for a route registered to this View."""
         return render_template(HtmlPage(
             head=None, body='Hello World From Netify').build())
+
+
+class Views(Enum):
+    """Enum of view classes available in this module."""
+    hello_world_index = HelloWorldIndex

@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import abc
+
 from flask import Markup
 from flask import render_template_string
 from yattag import Doc
@@ -29,12 +31,16 @@ def render_template(template):
     return Markup(render_template_string(template_string))
 
 
-class Page(object):
+class Page(abc.ABC):
     """Base object for pages."""
+    @abc.abstractmethod
     def build(self):
-        """Build the page template string."""
-        raise NotImplementedError('%s: Must be implemented by subclass.' %
-                                  self.__class__.__name__)
+        """Build and return the page template string."""
+        pass
+
+    def render_template(self):
+        """Helper method for rendering a page template."""
+        return render_template(self.build())
 
     def __call__(self, *args, **kwargs):
         self.__class__.__init__(self, *args, **kwargs)
@@ -62,7 +68,7 @@ class HtmlPage(Page):
         self.head_txt = None
         self.body_txt = None
 
-    def _get_text(self):
+    def get_text(self):
         """Convert possible yattag.Doc objects to strings."""
         for obj_name in self.object_string_map:
             obj = getattr(self, obj_name, '')
@@ -77,7 +83,7 @@ class HtmlPage(Page):
         if getattr(self, 'head', '') in ['', None]:
             self.head = Doc()
             self.head.stag('meta', charset='utf-8')
-        self._get_text()
+        self.get_text()
         doc = Doc()
         doc.asis('<!DOCTYPE html/>')
         with doc.tag('html'):

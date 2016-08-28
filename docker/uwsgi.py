@@ -19,7 +19,7 @@ from netify.config import Config
 
 config = Config.load_config('/etc/netify.cfg')
 netify_app = NetifyApp(config)
-netify_app.register_views(Views())
+netify_app.register_views(Views)
 netify_app.flask_app.logger.info('NETIFY Loaded.')
 
 # Set the "callable" so UWSGI can find the application.

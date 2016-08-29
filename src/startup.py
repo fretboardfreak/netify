@@ -17,9 +17,21 @@ from .view import Views
 from .config import Config
 
 
-def main():
-    """The main method for the Netify application."""
+def cli_main():
+    """The main method for the Netify app, when called from the CLI."""
     config = Config.load_config('/home/csand/netify/dev.cfg')
     netify_app = NetifyApp(config)
     netify_app.register_views(Views)
     netify_app.run(debug=True)
+
+
+def uwsgi_main(config_file):
+    """The main method for the Netify app, when started via UWSGI."""
+    netify_app = NetifyApp(Config.load_config(config_file))
+    netify_app.register_views(Views)
+    netify_app.flask_app.logger.info('NETIFY Loaded.')
+
+    # save netify_app to the uwsgi_main object to avoid GC
+    uwsgi_main.netify_app = netify_app
+
+    return netify_app.flask_app

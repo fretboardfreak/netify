@@ -16,11 +16,11 @@
 
 """The netify CLI script."""
 
-try:  # use installed netify package if available
-    import netify
+try:  #  use installed netify package if available
+    from netify import cli_main
 except ImportError:  # use src package in repository instead
-    import src as netify
+    from src import cli_main
 
 
 if __name__ == "__main__":
-    netify.main()
+    cli_main()

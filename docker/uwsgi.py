@@ -12,15 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from netify.app import NetifyApp
-from netify.view import Views
-from netify.config import Config
 
-
-config = Config.load_config('/etc/netify.cfg')
-netify_app = NetifyApp(config)
-netify_app.register_views(Views)
-netify_app.flask_app.logger.info('NETIFY Loaded.')
+from netify.startup import uwsgi_main
 
 # Set the "callable" so UWSGI can find the application.
-app = netify_app.flask_app
+# The UWSGI config in the Base Docker image used looks for a variable named
+# "app" in a module called main. This (uwsgi.py) module will be renamed during
+# the docker image build to "main.py" which is also the configured entry point
+# for the application in the UWSGI config.
+app = uwsgi_main('/etc/netify.cfg')

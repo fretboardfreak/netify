@@ -28,8 +28,8 @@ def run_netify():
     level imports are allowed. Using a method we squish the import scope and
     get to drink our flask too.
     """
-    from netify import cli_main
-    cli_main()
+    from netify.app import NetifyApp
+    NetifyApp.cli_main()
 
 
 if __name__ == "__main__":

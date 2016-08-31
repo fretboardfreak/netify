@@ -12,7 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
+
 from flask import Flask
+
+from .view import Views
+from .config import Config
 
 
 class NetifyApp(object):
@@ -26,6 +31,24 @@ class NetifyApp(object):
             if config:
                 self.config = config
                 self.config.update_flask(self.flask_app)
+
+    @staticmethod
+    def cli_main():
+        """The main method for the Netify app, when called from the CLI."""
+        config = Config.load_config(os.path.join(os.getenv('HOME'),
+                                                 'netify/dev.cfg'))
+        netify_app = NetifyApp(config)
+        netify_app.register_views(Views)
+        netify_app.run(debug=True)
+
+    @staticmethod
+    def uwsgi_main(config_file):
+        """The main method for the Netify app, when started via UWSGI."""
+        netify_app = NetifyApp(Config.load_config(config_file))
+        netify_app.register_views(Views)
+        netify_app.flask_app.logger.info('NETIFY Loaded.')
+
+        return netify_app.flask_app
 
     def register_views(self, views):
         """Register the view classes against the flask app.

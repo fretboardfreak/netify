@@ -23,14 +23,19 @@ from .config import Config
 class NetifyApp(object):
     """The Netify Application object."""
     flask_app = None
+    netify_app = None
 
     def __init__(self, config=None):
-        if self.flask_app is None:  # First time init
-            self.__class__.flask_app = Flask(__name__)
-            self.registered_views = []
-            if config:
-                self.config = config
-                self.config.update_flask(self.flask_app)
+        if self.netify_app is None:  # First time init
+            if self.flask_app is None:
+                self.__class__.flask_app = Flask(__name__)
+                self.registered_views = []
+                if config:
+                    self.config = config
+                    self.config.update_flask(self.flask_app)
+            self.__class__.netify_app = self
+        else:
+            self = self.__class__.netify_app
 
     @staticmethod
     def cli_main():

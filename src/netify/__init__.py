@@ -1,5 +1,4 @@
 """Netify: turn boring things into stuff for the net."""
-from .startup import cli_main
-from .startup import uwsgi_main
+from .app import NetifyApp
 
-__ALL__ = [cli_main, uwsgi_main]
+__ALL__ = [NetifyApp]

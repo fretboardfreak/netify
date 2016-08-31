@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
+
 from .app import NetifyApp
 from .view import Views
 from .config import Config
@@ -19,7 +21,8 @@ from .config import Config
 
 def cli_main():
     """The main method for the Netify app, when called from the CLI."""
-    config = Config.load_config('/home/csand/netify/dev.cfg')
+    config = Config.load_config(os.path.join(os.getenv('HOME'),
+                                             'netify/dev.cfg'))
     netify_app = NetifyApp(config)
     netify_app.register_views(Views)
     netify_app.run(debug=True)

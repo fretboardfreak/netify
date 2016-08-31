@@ -13,11 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from netify.startup import uwsgi_main
+#from netify.startup import uwsgi_main
+from netify.app import NetifyApp
 
 # Set the "callable" so UWSGI can find the application.
 # The UWSGI config in the Base Docker image used looks for a variable named
 # "app" in a module called main. This (uwsgi.py) module will be renamed during
 # the docker image build to "main.py" which is also the configured entry point
 # for the application in the UWSGI config.
-app = uwsgi_main('/etc/netify.cfg')
+app = NetifyApp.uwsgi_main('/etc/netify.cfg')

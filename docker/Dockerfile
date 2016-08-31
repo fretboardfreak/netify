@@ -19,8 +19,7 @@ RUN pip install -U -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
 # Add the flask application
-RUN mkdir -p /app/netify
-COPY src/* /app/netify/
+COPY src/netify /app/netify
 
 # The UWSGI Setup looks for the object "app" in "/app/main.py"
 COPY docker/uwsgi.py /app/main.py

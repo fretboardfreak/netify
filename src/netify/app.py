@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
+import abc
 
 from flask import Flask
 
@@ -20,8 +20,26 @@ from .view import Views
 from .config import Config
 
 
-class NetifyApp(object):
-    """The Netify Application object."""
+class UwsgiMixin(object):
+    """A mixin to add a main method that can be called with UWSGI."""
+    @staticmethod
+    def uwsgi_main(config_file):
+        """The main method for the Netify app, when started via UWSGI."""
+        netify_app = NetifyApp(Config.load_config(config_file))
+        netify_app.register_views(Views)
+        netify_app.flask_app.logger.info('NETIFY Loaded.')
+
+        return netify_app.flask_app
+
+
+class NetifyCore(abc.ABC):
+    """The Netify Application object.
+
+    Both the Flask Application object and the Netify context are saved as
+    singletons for easy access by other code elsewhere in the project. Once the
+    Netify Application is configured it can be accessed by a piece of code
+    simply by reinstanciating the App class.
+    """
     flask_app = None
     netify_app = None
 
@@ -46,14 +64,11 @@ class NetifyApp(object):
         netify_app.register_views(Views)
         netify_app.run(debug=True)
 
-    @staticmethod
-    def uwsgi_main(config_file):
-        """The main method for the Netify app, when started via UWSGI."""
-        netify_app = NetifyApp(Config.load_config(config_file))
-        netify_app.register_views(Views)
-        netify_app.flask_app.logger.info('NETIFY Loaded.')
-
-        return netify_app.flask_app
+    @property
+    @abc.abstractproperty
+    def description(self):
+        """Provide a description of your app for the CLI Help text."""
+        return getattr(self, 'description', '')
 
     def register_views(self, views):
         """Register the view classes against the flask app.
@@ -77,3 +92,8 @@ class NetifyApp(object):
     def run(self, host=None, port=None, debug=None):
         """Run the Flask Server."""
         self.flask_app.run(host, port, debug)
+
+
+class NetifyApp(NetifyCore, CliMixin, UwsgiMixin):
+    """An example Netify App composed of the Core and some Mixins."""
+    description = "A basic Netify application with all the bells and whistles."

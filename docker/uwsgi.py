@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#from netify.startup import uwsgi_main
 from netify.app import NetifyApp
 
 # Set the "callable" so UWSGI can find the application.

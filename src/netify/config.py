@@ -17,6 +17,21 @@ from configparser import SafeConfigParser
 from enum import Enum
 
 
+def guess_a_config_location():
+    """Try to look for a netify config file in a few appropriate places."""
+    names = ['netify.cfg', 'config.cfg', 'dev.cfg']
+    home_paths = [os.path.join(os.getenv('HOME'), stub)
+                  for stub in ['.%s', 'netify/%s']]
+    other_paths = ['/etc/netify/%s']
+    paths = [os.path.join(os.getcwd(), name) for name in names]
+    paths.append('/etc/netify.cfg')
+    for name in names:
+        paths.extend(path % name for path in home_paths)
+    for name in names:
+        paths.extend(path % name for path in other_paths)
+    return [path for path in paths if os.path.exists(path)]
+
+
 class Section(Enum):
     """String names for the sections in the Netify config file"""
     flask = 'flask'

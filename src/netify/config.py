@@ -31,7 +31,7 @@ class Config(object):
     def __init__(self, config_file):
         self.file = config_file
         self.parser = SafeConfigParser()
-        if isinstance(self.file, str):
+        if isinstance(self.file, (str, list)):
             self.parser.read(self.file)
         else:  # assume file object was given instead
             self.parser.read_file(self.file)

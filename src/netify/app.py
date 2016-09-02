@@ -12,12 +12,49 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from argparse import ArgumentParser
 import abc
 
 from flask import Flask
 
 from .view import Views
 from .config import Config
+from .config import guess_a_config_location
+
+
+class CliMixin(object):
+    """A mixin that can be used to add a CLI front end to your Netify app."""
+    @classmethod
+    def cli_main(cls):
+        """The main method for the Netify app, when called from the CLI."""
+        parser = ArgumentParser(description=cls.description)
+        discovered_configs = '\n  - '.join(guess_a_config_location())
+        parser.add_argument(
+            '-c', '--config', action='store', required=True,
+            help=("Specify a path to the config file that you wish to use. "
+                  "Some available config files that were discovered:\n%s" %
+                  discovered_configs))
+        parser.add_argument(
+            '--debug', action='store_true',
+            help=("Enable debug in Netify and Flask. (Not suitable for "
+                  "production.)"))
+        default_port = 5000
+        parser.add_argument(
+            '-p', '--port', action='store', type=int, default=default_port,
+            help="Use a different port. [Default: %s]" % default_port)
+        parser.add_argument(
+            '--public', action='store_true',
+            help=("Accept connections from external requests using the "
+                  "dev server."))
+        args = parser.parse_args()
+
+        host = None
+        if args.public:
+            host = '0.0.0.0'
+
+        netify_app = NetifyApp(config=Config.load_config(args.config))
+        netify_app.register_views(Views)
+        netify_app.run(host=host, port=args.port, debug=args.debug)
 
 
 class UwsgiMixin(object):
@@ -54,15 +91,6 @@ class NetifyCore(abc.ABC):
             self.__class__.netify_app = self
         else:
             self = self.__class__.netify_app
-
-    @staticmethod
-    def cli_main():
-        """The main method for the Netify app, when called from the CLI."""
-        config = Config.load_config(os.path.join(os.getenv('HOME'),
-                                                 'netify/dev.cfg'))
-        netify_app = NetifyApp(config)
-        netify_app.register_views(Views)
-        netify_app.run(debug=True)
 
     @property
     @abc.abstractproperty

@@ -16,41 +16,36 @@
 
 from enum import Enum
 
-from flask.views import View
+from flask.ext.classy import FlaskView
 from yattag import Doc
 
 from .template import HtmlPage
-from .template import dict_to_html_list
+from .template import build_debug_div
 
 
-class HelloWorldIndex(View):
+class HelloWorldIndex(FlaskView):
     """The index view."""
     name = 'index'
-    default_route = '/'
-
-    def __init__(self, netify_app, debug=False):
-        self.netify_app = netify_app
-        self.debug = debug
+    route_base = '/'
+    netify_app = None
 
     @classmethod
-    def register(cls, netify, route=None, *args, **kwargs):
-        """Register the view on the flask application."""
-        if not route:
-            route = cls.default_route
-        netify.flask_app.add_url_rule(
-            route, view_func=cls.as_view(cls.name, netify_app=netify,
-                                         *args, **kwargs))
+    def register(cls, netify_app, **kwargs):
+        """Register this view against the Netify Web Application."""
+        cls.netify_app = netify_app
+        super(HelloWorldIndex, cls).register(netify_app.flask_app, **kwargs)
 
-    def dispatch_request(self):
+    def index(self):
         """Handle an incoming request for a route registered to this View."""
         hello_world = 'Hello World From Netify'
-        if not self.debug:
+        view_opts = self.netify_app.config.get_page_options(self.name)
+        if 'debug' not in view_opts:
             body_txt = hello_world
         else:  # add the debug div to the bottom of the page
             body = Doc()
             body.text(hello_world)
             body.stag('hr')
-            body.asis(self.debug_div)
+            body.asis(build_debug_div(self.netify_app))
             body_txt = body.getvalue()
         return HtmlPage(head=None, body=body_txt).render_template()
 

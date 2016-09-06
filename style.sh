@@ -17,4 +17,4 @@
 echo "[PEP8]"
 find . -iname "*py" -exec pep8 '{}' '+'
 echo "[Pylint]"
-PYTHONPATH=. pylint src/netify run_netify.py
+PYTHONPATH=. pylint --disable no-name-in-module,import-error src/netify run_netify.py

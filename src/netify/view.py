@@ -54,24 +54,6 @@ class HelloWorldIndex(View):
             body_txt = body.getvalue()
         return HtmlPage(head=None, body=body_txt).render_template()
 
-    @property
-    def debug_div(self):
-        """Generate a div section containing debugging information."""
-        config_dict = self.netify_app.config.to_string_dict()
-        div = Doc()
-        with div.tag('div'):
-            div.attr(klass="debug")
-            div.text('DEBUG:')
-            div.stag('br')
-            div.text('Netify Config File:')
-            div.stag('br')
-            div.asis(dict_to_html_list(config_dict))
-            div.stag('br')
-            div.text('Flask Config')
-            div.stag('br')
-            div.asis(dict_to_html_list(dict(self.netify_app.flask_app.config)))
-        return div.getvalue()
-
 
 class Views(Enum):
     """Enum of view classes available in this module."""

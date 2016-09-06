@@ -107,3 +107,21 @@ def dict_to_html_list(dictionary):
                 else:
                     doc.text('%s: %s' % (key, dictionary[key]))
     return doc.getvalue()
+
+
+def build_debug_div(netify):
+    """Generate a div section containing debugging information."""
+    config_dict = netify.config.to_string_dict()
+    div = Doc()
+    with div.tag('div'):
+        div.attr(klass="debug")
+        div.text('DEBUG:')
+        div.stag('br')
+        div.text('Netify Config File:')
+        div.stag('br')
+        div.asis(dict_to_html_list(config_dict))
+        div.stag('br')
+        div.text('Flask Config')
+        div.stag('br')
+        div.asis(dict_to_html_list(dict(netify.flask_app.config)))
+    return div.getvalue()

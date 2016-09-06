@@ -113,8 +113,7 @@ class NetifyCore(abc.ABC):
                     self.flask_app.logger.warning(
                         'Not Registering view %s. A view has already '
                         'been registered for %s.' % (view.name, view_cls.name))
-                view_opts = self.config.get_page_options(view_cls.name)
-                view_cls.register(self, **view_opts)
+                view_cls.register(self)
                 self.registered_views.append(view_cls.name)
 
     def run(self, host=None, port=None, debug=None):

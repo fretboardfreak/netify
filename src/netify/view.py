@@ -23,33 +23,40 @@ from .template import HtmlPage
 from .template import build_debug_div
 
 
-class HelloWorldIndex(FlaskView):
-    """The index view."""
-    name = 'index'
-    route_base = '/'
+class NetifyView(FlaskView):
+    """A View class for use with Netify applications."""
     netify_app = None
 
     @classmethod
     def register(cls, netify_app, **kwargs):
         """Register this view against the Netify Web Application."""
         cls.netify_app = netify_app
-        super(HelloWorldIndex, cls).register(netify_app.flask_app, **kwargs)
+        super(NetifyView, cls).register(netify_app.flask_app, **kwargs)
+
+
+class HelloWorld(NetifyView):
+    """A Hello World index view example with debugging output."""
+    name = 'hello_world'
+    route_base = '/'
 
     def index(self):
         """Handle an incoming request for a route registered to this View."""
         hello_world = 'Hello World From Netify'
         view_opts = self.netify_app.config.get_page_options(self.name)
-        if 'debug' not in view_opts:
-            body_txt = hello_world
-        else:  # add the debug div to the bottom of the page
+        debug = False
+        if 'debug' in view_opts:
+            debug = view_opts['debug']
+        if debug:
             body = Doc()
             body.text(hello_world)
             body.stag('hr')
             body.asis(build_debug_div(self.netify_app))
             body_txt = body.getvalue()
+        else:
+            body_txt = hello_world
         return HtmlPage(head=None, body=body_txt).render_template()
 
 
 class Views(Enum):
     """Enum of view classes available in this module."""
-    hello_world_index = HelloWorldIndex
+    hello_world = HelloWorld

@@ -105,16 +105,19 @@ class NetifyCore(abc.ABC):
         each View class.
         """
         view_config = self.config.netify_views
+        routes = self.config.routes
         enabled = [name.strip() for name in view_config['enabled'].split(',')]
         for view in views:
             view_cls = view.value
             if view.name in enabled:
-                if view_cls.name in self.registered_views:
+                if view.name in self.registered_views:
                     self.flask_app.logger.warning(
                         'Not Registering view %s. A view has already '
-                        'been registered for %s.' % (view.name, view_cls.name))
-                view_cls.register(self)
-                self.registered_views.append(view_cls.name)
+                        'been registered for %s.' % (view.name,
+                                                     view_cls.name))
+                view_cls.register(self, route_prefix=routes.get(view.name,
+                                                                None))
+                self.registered_views.append(view.name)
 
     def run(self, host=None, port=None, debug=None):
         """Run the Flask Server."""

@@ -36,6 +36,7 @@ class Section(Enum):
     """String names for the sections in the Netify config file"""
     flask = 'flask'
     netify_views = 'netify_views'
+    routes = 'routes'
 
 
 class Config(object):
@@ -116,6 +117,11 @@ class Config(object):
     def get_page_options(self, name):
         """Return a dict of options for a page."""
         return self._section_as_dict(name)
+
+    @property
+    def routes(self):
+        """Return the routes section from the config file."""
+        return self._section_as_dict(Section.routes.value)
 
 
 class FlaskDefaults(Enum):

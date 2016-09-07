@@ -7,6 +7,110 @@ Netify
 The goal of Netify is to provide a solid structure as well as useful tools for
 starting up a new `Flask <http://flask.pocoo.org/>`_ project quickly.
 
+.. note::
+
+    At this time I wouldn't even call this an Alpha Release Candidate yet. The
+    project is nearing the point where I can start using and maturing it rather
+    than writing new infrastructture. When I get there, support for setuptools
+    will be added and the first proper version number and alpha release will be
+    done.
+
+    I plan to eventually have more in depth documentation covering the
+    API of the Netify project. For now, here is a summary to wet your
+    appetite.
+
+    Pull requests, feedback, and defect submissions are still accepted and
+    encouraged throughout this early forming process so don't be shy!
+
+    --*fretboardfreak*
+
+    :date: 160907
+
+
+The goal of netify is to make it easy to customize your own website. Whether
+you want an actual web application with server side elements responding to user
+sessions or whether you want to compose some static files into a static website
+for upload to a hosting service, Netify should offer something to make your
+task a little bit easier.
+
+Getting Started
+---------------
+
+*TBD*
+
+Code Structure
+--------------
+
+The following module dependency diagram roughly describes the current structure
+of Netify::
+
+    [front_end_script]
+            |
+      [netify.app]---------\
+            |              |
+      [netify.config]   [netify.view]
+            |              |
+        [config.cfg]   [netify.template]
+
+- Front End Script: The front end script imports or composes a Netify
+  application object through multiple inheritance of the Netify Mixin classes,
+  then calls the appropriate main method to start the application.
+
+Modules from the netify package:
+
+- **app**: A module containing mixin classes that can be composed to create a
+  Netify app with the features you require in your project.
+
+- **config**: Contains a config class and required helper code for reading an
+  INI based config file and retrieving the configuration in a way that is
+  most useful for the application.
+
+- **config.cfg**: An INI formatted configuration file. The default sections
+  are:
+
+    - flask: used to hold Flask configuration instead of Flask's mechanism. I'd
+      rather only have one config file.
+
+    - netify_views: A section to help configure the views available in the
+      application.
+
+    - routes: A section mapping view classes to the base route used for those
+      views in the application.
+
+    - other: Some views can be configured here too. The section name for the
+      view should match the name used for the "netify_views:enabled" option.
+
+- **view**: Using the `Flask Classy <http://pythonhosted.org/Flask-Classy/>`_
+  extension this module provides a base View class for Netify applications. The
+  plan is to also include a set of configurable view classes that can be
+  modularly composed together. It is still encouraged for users of this package
+  to write some of their own templates or views, the code here should serve as
+  an example of how to use the Netify library.
+
+- **template**: A module (soon to be package) that adds some flexibility into
+  your templating life. While it will also support standard, file based `Jinja
+  <http://jinja.pocoo.org/>`_ templating, the Netify.template module also
+  includes support for, and examples of, templates created purely in code - or
+  by a combination of traditional and code based methods - using the `Yattag
+  <http://www.yattag.org/>`_ library.
+
+Contributing
+============
+
+The code is written for python 3 and the ``style.sh`` script has been
+implemented to keep an eye on my coding style. I would prefer not to ignore any
+of the messages from either the ``pep8`` or the ``pylint`` tool.
+
+Trailing whitespace is a no-no so get rid of it all. :)
+
+Beyond that, I prefer explicit over implicit, which is one of the strong
+pricipals driving the design of Netify to begin with. An example of this design
+is the way that the NetifyApp requires instanciation by some front end starting
+script. In contrast, a typical Flask app just puts the instantiation code at
+module level somewhere in the codebase. Ugh, the animals! :)
+
+Pull requests, feedback, and defect submissions are accepted and encouraged!
+
 License
 =======
 

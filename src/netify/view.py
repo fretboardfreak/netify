@@ -16,7 +16,7 @@
 
 from enum import Enum
 
-from flask.ext.classy import FlaskView
+from flask_classy import FlaskView
 from yattag import Doc
 
 from .template import HtmlPage

@@ -7,7 +7,7 @@ Netify
 The goal of Netify is to provide a solid structure as well as useful tools for
 starting up a new `Flask <http://flask.pocoo.org/>`_ project quickly.
 
-.. note::
+::
 
     At this time I wouldn't even call this an Alpha Release Candidate yet. The
     project is nearing the point where I can start using and maturing it rather
@@ -23,7 +23,6 @@ starting up a new `Flask <http://flask.pocoo.org/>`_ project quickly.
     encouraged throughout this early forming process so don't be shy!
 
     --*fretboardfreak*
-
     :date: 160907
 
 
@@ -68,17 +67,17 @@ Modules from the netify package:
 - **config.cfg**: An INI formatted configuration file. The default sections
   are:
 
-    - flask: used to hold Flask configuration instead of Flask's mechanism. I'd
-      rather only have one config file.
+  - *flask*: used to hold Flask configuration instead of Flask's mechanism. I'd
+    rather only have one config file.
 
-    - netify_views: A section to help configure the views available in the
-      application.
+  - *netify_views*: A section to help configure the views available in the
+    application.
 
-    - routes: A section mapping view classes to the base route used for those
-      views in the application.
+  - *routes*: A section mapping view classes to the base route used for those
+    views in the application.
 
-    - other: Some views can be configured here too. The section name for the
-      view should match the name used for the "netify_views:enabled" option.
+  - *other*: Some views can be configured here too. The section name for the
+    view should match the name used for the "netify_views:enabled" option.
 
 - **view**: Using the `Flask Classy <http://pythonhosted.org/Flask-Classy/>`_
   extension this module provides a base View class for Netify applications. The

@@ -4,3 +4,9 @@
 __pycache__
 
 .DS_Store
+
+# setuptools files
+dist
+*.egg-info
+*.egg
+build

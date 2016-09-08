@@ -14,13 +14,16 @@
 # limitations under the License.
 from setuptools import setup
 
+
 def required():
     with open('requirements.txt', 'r') as reqf:
         return reqf.read().splitlines()
 
+
 def readme():
     with open('README.rst', 'r') as readmef:
         return readmef.read()
+
 
 setup(name='netify',
       version='0.1',
@@ -32,8 +35,8 @@ setup(name='netify',
       license='Apache',
       package_dir={'': 'src'},
       packages=['netify'],
-      entry_points = {
-        'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
+      entry_points={
+          'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
       },
       use_2to3=False,
       install_requires=required(),
@@ -56,5 +59,5 @@ setup(name='netify',
           'Topic :: Software Development :: Libraries',
           ('Topic :: Software Development :: Libraries :: '
            'Application Frameworks'),
-      ],
+          ],
       )

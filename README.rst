@@ -122,6 +122,25 @@ module level somewhere in the codebase. Ugh, the animals! :)
 
 Pull requests, feedback, and defect submissions are accepted and encouraged!
 
+Release Process
+---------------
+
+*more for my own reference than in expectation that anybody else do these
+steps...*
+
+.. warning::
+
+    You really only get one chance to upload files to PyPI for a version
+    number. So the version number basically becomes
+    ``<major>.<minor>.<pypi-attempt>``.
+
+#. Make some changes worthy of release.
+#. Do some testing.
+#. Update the version number appropriately in ``setup.py``.
+#. Build the distribution: ``python3 setupy.py sdist bdist_wheel``
+#. Sign the distribution: ``gpg2 --detach-sign -a <file>  #rince and repeat for each file``
+#. Upload the distribution: ``twine upload -u fretboardfreak <files>``
+
 License
 =======
 

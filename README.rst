@@ -1,36 +1,48 @@
-======
-Netify
-======
+==========
+**netify**
+==========
 
-*Turn boring things into something for the net*
+**netify** is a library/application/framework that tries to make it easier for you
+to create something for the internet.
 
-The goal of Netify is to provide a solid structure as well as useful tools for
-starting up a new `Flask <http://flask.pocoo.org/>`_ project quickly.
+The goal of **netify** is to make it easy to customize your own website. You can
+build a web application with server side elements responding to user sessions
+or compose some of your files into a static website for
+upload to a hosting service. **netify** should offer something to make your task a
+little bit easier.
 
-::
+In the most basic sense, **netify** provides a solid structure for starting up a
+new `Flask <http://flask.pocoo.org/>`_ project quickly. Beyond that, **netify**
+tries to provide useful tools for creating your own custom wesite or
+application with minimal effort. Use it as a library in your python application
+to add a web based UI that can be deployed with `docker
+<https://www.docker.com>`_. Or, use it directly as an application to compose a
+few of the features provided by **netify** into a quick personalized website.
 
-    At this time I wouldn't even call this an Alpha Release Candidate yet. The
-    project is nearing the point where I can start using and maturing it rather
-    than writing new infrastructture. When I get there, support for setuptools
-    will be added and the first proper version number and alpha release will be
-    done.
+**TL;DR**: *Turn boring things into something for the net*
 
-    I plan to eventually have more in depth documentation covering the
-    API of the Netify project. For now, here is a summary to wet your
-    appetite.
+.. admonition:: Project Links
 
-    Pull requests, feedback, and defect submissions are still accepted and
+    - Homepage: http://fretboardfreak.com/netify
+    - Mirror: http://pythonhosted.org/netify (Not Active Yet)
+    - PyPi: https://pypi.python.org/pypi/netify
+    - Github: https://github.com/fretboardfreak/netify
+    - Bitbucket (mirror): https://bitbucket.org/fret/netify (Not Active Yet)
+
+*Dev Note*::
+
+    At this time I would call this an alpha quality project. netify is nearing
+    the point where I can start using and maturing it rather than writing new
+    infrastructure. I also plan to eventually have more in depth documentation
+    covering the API of the Netify project. For now, here is a summary to wet
+    your appetite.
+
+    Pull requests, feedback, and defect submissions are both accepted and
     encouraged throughout this early forming process so don't be shy!
 
-    --*fretboardfreak*
-    :date: 160907
+    --fretboardfreak
+    :date: 160908
 
-
-The goal of netify is to make it easy to customize your own website. Whether
-you want an actual web application with server side elements responding to user
-sessions or whether you want to compose some static files into a static website
-for upload to a hosting service, Netify should offer something to make your
-task a little bit easier.
 
 Getting Started
 ---------------
@@ -55,7 +67,7 @@ of Netify::
   application object through multiple inheritance of the Netify Mixin classes,
   then calls the appropriate main method to start the application.
 
-Modules from the netify package:
+Modules from the **netify** package:
 
 - **app**: A module containing mixin classes that can be composed to create a
   Netify app with the features you require in your project.

@@ -60,13 +60,14 @@ class HtmlPage(Page):
     """
     object_string_map = {'head': 'head_txt', 'body': 'body_txt'}
 
-    def __init__(self, head=None, body=None):
+    def __init__(self, head=None, body=None, flash_messages=True):
         if head is not None:
             self.head = head
         if body is not None:
             self.body = body
         self.head_txt = None
         self.body_txt = None
+        self.flash_messages = flash_messages
 
     def get_text(self):
         """Convert possible yattag.Doc objects to strings."""
@@ -78,6 +79,28 @@ class HtmlPage(Page):
                         obj.getvalue())
             else:
                 setattr(self, self.object_string_map[obj_name], obj)
+
+    def get_flashed_messages(self):
+        """Build and fill a div tag with any flashed messages.,
+
+        This is just a jinja2 template for retrieving flashed messages. The
+        render_template method still needs to be called to get any messages
+        that are flashed before sending the page to the client.
+        """
+        doc = Doc()
+        with doc.tag('div'):
+            doc.asis('{% with messages = get_flashed_messages() %}')
+            doc.asis('{% if messages %}')
+            doc.asis('<hr>')
+            doc.text('Messages')
+            doc.asis('<ul class=flashes>')
+            doc.asis('{% for message in messages %}')
+            doc.asis('<li>{{ message }}</li>')
+            doc.asis('{% endfor %}')
+            doc.asis('</ul>')
+            doc.asis('{% endif %}')
+            doc.asis('{% endwith %}')
+        return doc.getvalue()
 
     def build(self):
         if getattr(self, 'head', '') in ['', None]:
@@ -92,6 +115,8 @@ class HtmlPage(Page):
                 doc.asis(self.head_txt)
             with doc.tag('body'):
                 doc.asis(self.body_txt)
+                if self.flash_messages:
+                    doc.asis(self.get_flashed_messages())
         return doc
 
 

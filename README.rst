@@ -5,14 +5,11 @@
 **netify** is a library/application/framework that tries to make it easier for you
 to create something for the internet.
 
-The goal of **netify** is to make it easy to customize your own website. You can
-build a web application with server side elements responding to user sessions
-or compose some of your files into a static website for
-upload to a hosting service. **netify** should offer something to make your task a
-little bit easier.
-
-In the most basic sense, **netify** provides a solid structure for starting up a
-new `Flask <http://flask.pocoo.org/>`_ project quickly. Beyond that, **netify**
+The goal of **netify** is to make it easy to customize your own website. You
+can build a web application with server side elements responding to user
+sessions or compose some of your files into a static website for upload to a
+hosting service. **netify** provides a solid structure for starting up a new
+`Flask <http://flask.pocoo.org/>`_ project quickly. Beyond that, **netify**
 tries to provide useful tools for creating your own custom wesite or
 application with minimal effort. Use it as a library in your python application
 to add a web based UI that can be deployed with `docker

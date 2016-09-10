@@ -62,9 +62,7 @@ class HelloWorld(NetifyView):
         else:
             body_txt = hello_world
         flash('This is what a flashed message looks like: %s' % hello_world)
-        flash_messages = False
-        if 'flash_messages' in self.page_options:
-            flash_messages = self.page_options['flash_messages']
+        flash_messages = self.page_options.get('flash_messages', False)
         return HtmlPage(head=None, body=body_txt,
                         flash_messages=flash_messages).render_template()
 

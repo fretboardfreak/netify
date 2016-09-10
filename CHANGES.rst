@@ -2,6 +2,13 @@
 netify change-log
 =================
 
+- **0.3**: TBD
+
+  - additional tweaks and updates to the RawFile view.
+
+    - sorted directory listing page.
+    - hide parent dir link when it matches the top dir link.
+
 - **0.2**: 160910 - Raw Files
 
   - add a change log: CHANGES.rst

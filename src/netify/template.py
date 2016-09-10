@@ -80,28 +80,6 @@ class HtmlPage(Page):
             else:
                 setattr(self, self.object_string_map[obj_name], obj)
 
-    def get_flashed_messages(self):
-        """Build and fill a div tag with any flashed messages.,
-
-        This is just a jinja2 template for retrieving flashed messages. The
-        render_template method still needs to be called to get any messages
-        that are flashed before sending the page to the client.
-        """
-        doc = Doc()
-        with doc.tag('div'):
-            doc.asis('{% with messages = get_flashed_messages() %}')
-            doc.asis('{% if messages %}')
-            doc.asis('<hr>')
-            doc.text('Messages')
-            doc.asis('<ul class=flashes>')
-            doc.asis('{% for message in messages %}')
-            doc.asis('<li>{{ message }}</li>')
-            doc.asis('{% endfor %}')
-            doc.asis('</ul>')
-            doc.asis('{% endif %}')
-            doc.asis('{% endwith %}')
-        return doc.getvalue()
-
     def build(self):
         if getattr(self, 'head', '') in ['', None]:
             self.head = Doc()
@@ -116,7 +94,7 @@ class HtmlPage(Page):
             with doc.tag('body'):
                 doc.asis(self.body_txt)
                 if self.flash_messages:
-                    doc.asis(self.get_flashed_messages())
+                    doc.asis(get_flashed_messages_div())
         return doc
 
 
@@ -177,3 +155,26 @@ def build_debug_div(netify):
         div.stag('br')
         div.asis(dict_to_html_list(dict(netify.flask_app.config)))
     return div.getvalue()
+
+
+def get_flashed_messages_div():
+    """Build and fill a div tag with any flashed messages.,
+
+    This is just a jinja2 template for retrieving flashed messages. The
+    render_template method still needs to be called to get any messages
+    that are flashed before sending the page to the client.
+    """
+    doc = Doc()
+    with doc.tag('div'):
+        doc.asis('{% with messages = get_flashed_messages() %}')
+        doc.asis('{% if messages %}')
+        doc.asis('<hr>')
+        doc.text('Messages')
+        doc.asis('<ul class=flashes>')
+        doc.asis('{% for message in messages %}')
+        doc.asis('<li>{{ message }}</li>')
+        doc.asis('{% endfor %}')
+        doc.asis('</ul>')
+        doc.asis('{% endif %}')
+        doc.asis('{% endwith %}')
+    return doc.getvalue()

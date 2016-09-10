@@ -26,7 +26,7 @@ def readme():
 
 
 setup(name='netify',
-      version='0.1.1',
+      version='0.2',
       description='Turn boring things into something for the net.',
       long_description=readme(),
       url='https://github.com/fretboardfreak/netify',

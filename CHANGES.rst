@@ -2,7 +2,7 @@
 netify change-log
 =================
 
-- **0.2**: TBD
+- **0.2**: 160910 - Raw Files
 
   - add a change log: CHANGES.rst
 

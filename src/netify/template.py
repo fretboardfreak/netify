@@ -95,17 +95,20 @@ class HtmlPage(Page):
         return doc
 
 
-def dict_to_html_list(dictionary):
+def dict_to_html_list(dictionary, key_sep=None):
     """Convert a python dictionary into a string representing an HTML list."""
+    key_sep = ': ' if not key_sep else key_sep
     doc = Doc()
     with doc.tag('ul'):
         for key in dictionary:
             with doc.tag('li'):
                 if isinstance(dictionary[key], dict):
-                    doc.text('%s:' % key)
+                    doc.text('%s%s' % (key, key_sep))
                     doc.asis(dict_to_html_list(dictionary[key]))
+                elif isinstance(dictionary[key], (list, tuple)):
+                    doc.asis(list_to_html_list(dictionary[key]))
                 else:
-                    doc.text('%s: %s' % (key, dictionary[key]))
+                    doc.text('%s%s%s' % (key, key_sep, dictionary[key]))
     return doc.getvalue()
 
 

@@ -124,6 +124,8 @@ def dict_to_html_list(dictionary, key_sep=None):
     """Convert a python dictionary into a string representing an HTML list."""
     key_sep = ': ' if not key_sep else key_sep
     doc = Doc()
+    if not dictionary:
+        return ""
     with doc.tag('ul'):
         for key in dictionary:
             with doc.tag('li'):
@@ -140,6 +142,8 @@ def dict_to_html_list(dictionary, key_sep=None):
 def list_to_html_list(iterable, list_tag=None):
     """Convert a python list into a string representing an HTML list."""
     list_tag = list_tag if list_tag else 'ul'
+    if not iterable:
+        return ""
     doc = Doc()
     with doc.tag(list_tag):
         for item in iterable:
@@ -149,7 +153,7 @@ def list_to_html_list(iterable, list_tag=None):
                 elif isinstance(item, (list, tuple)):
                     doc.asis(list_to_html_list(item))
                 else:
-                    doc.text(item)
+                    doc.asis(item)
     return doc.getvalue()
 
 

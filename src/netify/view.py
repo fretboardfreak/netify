@@ -33,6 +33,11 @@ class NetifyView(FlaskView):
         cls.netify_app = netify_app
         super(NetifyView, cls).register(netify_app.flask_app, **kwargs)
 
+    @property
+    def page_options(self):
+        """Retrieve the options for this View from the config file."""
+        return self.netify_app.config.get_page_options(self.name)
+
 
 class HelloWorld(NetifyView):
     """A Hello World index view example with debugging output."""
@@ -42,14 +47,15 @@ class HelloWorld(NetifyView):
     def index(self):
         """Handle an incoming request for a route registered to this View."""
         hello_world = 'Hello World From Netify'
-        view_opts = self.netify_app.config.get_page_options(self.name)
         debug = False
-        if 'debug' in view_opts:
-            debug = view_opts['debug']
+        if 'debug' in self.page_options:
+            debug = self.page_options['debug']
         if debug:
             body = Doc()
             body.text(hello_world)
             body.stag('hr')
+            body.text('View Functions:')
+            body.stag('br')
             body.asis(build_debug_div(self.netify_app))
             body_txt = body.getvalue()
         else:

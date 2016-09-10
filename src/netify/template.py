@@ -109,6 +109,22 @@ def dict_to_html_list(dictionary):
     return doc.getvalue()
 
 
+def list_to_html_list(iterable, list_tag=None):
+    """Convert a python list into a string representing an HTML list."""
+    list_tag = list_tag if list_tag else 'ul'
+    doc = Doc()
+    with doc.tag(list_tag):
+        for item in iterable:
+            with doc.tag('li'):
+                if isinstance(item, dict):
+                    doc.asis(dict_to_html_list(item))
+                elif isinstance(item, (list, tuple)):
+                    doc.asis(list_to_html_list(item))
+                else:
+                    doc.text(item)
+    return doc.getvalue()
+
+
 def build_debug_div(netify):
     """Generate a div section containing debugging information."""
     config_dict = netify.config.to_string_dict()

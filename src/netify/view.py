@@ -30,6 +30,7 @@ from .template import list_to_html_list
 
 class NetifyView(FlaskView):
     """A View class for use with Netify applications."""
+    name = "netify_view"
     netify_app = None
 
     @classmethod
@@ -102,7 +103,8 @@ class RawFile(NetifyView):
             base = base[1:]
         return base
 
-    def _get_top_dir_link(self):
+    @staticmethod
+    def _get_top_dir_link():
         """Get a link to the Top Directory of the Raw File view."""
         doc = Doc()
         with doc.tag('a'):
@@ -110,7 +112,8 @@ class RawFile(NetifyView):
             doc.text('Top Dir')
         return doc.getvalue()
 
-    def _get_parent_dir_link(self, parent_dir):
+    @staticmethod
+    def _get_parent_dir_link(parent_dir):
         """Get a link to the parent directory of the current page."""
         doc = Doc()
         with doc.tag('a'):
@@ -158,7 +161,8 @@ class RawFile(NetifyView):
             links.append(doc.getvalue())
         return list_to_html_list(links)
 
-    def _get_file(self, path):
+    @staticmethod
+    def _get_file(path):
         """Return the contents of a file as a preformatted text field."""
         doc = Doc()
         with doc.tag('pre'):
@@ -194,9 +198,11 @@ class RawFile(NetifyView):
                         flash_messages=flash_messages).render_template()
 
     def index(self):
+        """Get the Top Directory listing."""
         return self._raw_file()
 
     def get(self, name):
+        """Display a file or directory given by name."""
         return self._raw_file(name=name)
 
 

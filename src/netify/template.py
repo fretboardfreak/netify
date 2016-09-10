@@ -135,6 +135,10 @@ def build_debug_div(netify):
     with div.tag('div'):
         div.attr(klass="debug")
         div.text('DEBUG:')
+        rules = {}
+        for rule in list(netify.flask_app.url_map.iter_rules()):
+            rules[rule.endpoint] = rule.rule
+        div.asis(dict_to_html_list(rules, key_sep=' - '))
         div.stag('br')
         div.text('Netify Config File:')
         div.stag('br')

@@ -16,6 +16,7 @@
 
 from enum import Enum
 
+from flask import flash
 from flask_classy import FlaskView
 from yattag import Doc
 
@@ -60,7 +61,12 @@ class HelloWorld(NetifyView):
             body_txt = body.getvalue()
         else:
             body_txt = hello_world
-        return HtmlPage(head=None, body=body_txt).render_template()
+        flash('This is what a flashed message looks like: %s' % hello_world)
+        flash_messages = False
+        if 'flash_messages' in self.page_options:
+            flash_messages = self.page_options['flash_messages']
+        return HtmlPage(head=None, body=body_txt,
+                        flash_messages=flash_messages).render_template()
 
 
 class Views(Enum):

@@ -131,8 +131,9 @@ class RawFile(NetifyView):
         base = self._get_safe_base_path(path)
         if base != "":
             links.append(self._get_top_dir_link())
-        parent_dir = os.path.split(base)[0]
-        links.append(self._get_parent_dir_link(parent_dir))
+            if base.count('/') >= 1:
+                parent_dir = os.path.split(base)[0]
+                links.append(self._get_parent_dir_link(parent_dir))
         return list_to_html_list(links)
 
     def _get_dir_listing(self, path):

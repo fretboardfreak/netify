@@ -85,18 +85,25 @@ class NetifyCore(abc.ABC):
             if self.flask_app is None:
                 self.__class__.flask_app = Flask(__name__)
                 self.registered_views = []
-                if config:
-                    self.config = config
-                    self.config.update_flask(self.flask_app)
             self.__class__.netify_app = self
         else:
             self = self.__class__.netify_app
+        if config:
+            self.configure(config)
 
     @property
     @abc.abstractproperty
     def description(self):
         """Provide a description of your app for the CLI Help text."""
         return getattr(self, 'description', '')
+
+    def configure(self, config):
+        """Set up the config parser and update the Flask app config."""
+        if isinstance(config, Config):
+            self.config = config
+        else:
+            self.config = Config(config)
+        self.config.update_flask(self.flask_app)
 
     def register_views(self, views):
         """Register the view classes against the flask app.
@@ -115,6 +122,7 @@ class NetifyCore(abc.ABC):
                         'Not Registering view %s. A view has already '
                         'been registered for %s.' % (view.name,
                                                      view_cls.name))
+                self.flask_app.logger.debug('Registering view %s' % view.name)
                 view_cls.register(self, route_prefix=routes.get(view.name,
                                                                 None))
                 self.registered_views.append(view.name)

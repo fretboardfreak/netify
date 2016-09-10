@@ -150,6 +150,7 @@ class RawFile(NetifyView):
                 elif os.path.isdir(os.path.join(path, fname)):
                     fnames.append(fname + '/')
                     break
+        fnames.sort()
         base = self._get_safe_base_path(path)
         links = []
         for name in fnames:

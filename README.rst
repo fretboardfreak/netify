@@ -42,12 +42,12 @@ few of the features provided by **netify** into a quick personalized website.
 
 
 Getting Started
----------------
+===============
 
 *TBD*
 
 Code Structure
---------------
+==============
 
 The following module dependency diagram roughly describes the current structure
 of Netify::

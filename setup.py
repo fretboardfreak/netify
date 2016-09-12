@@ -41,6 +41,7 @@ setup(name='netify',
       use_2to3=False,
       install_requires=required(),
       zip_safe=True,
+      include_package_data=True,
       keywords='net netify app webapp html site website generator',
       classifiers=[
           'Development Status :: 3 - Alpha',

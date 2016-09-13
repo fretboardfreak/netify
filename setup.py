@@ -16,6 +16,7 @@ import distutils.log
 from distutils.cmd import Command
 from setuptools import setup
 from setuptools import find_packages
+from setuptools.command.test import test
 import os
 import subprocess
 
@@ -99,6 +100,18 @@ class Pep8Command(NetifySetupCommand):
         self._run_command(['pep8', '--statistics', '--verbose', self.netify_package])
 
 
+class NetifyTest(test):
+    """Combine unittest, pep8 and pylint checks all into one command."""
+
+    description = "Run pep8, pylint and unittest commands together."
+    user_options = []
+
+    def run(self):
+        self.run_command('pep8')
+        self.run_command('pylint')
+        super(NetifyTest, self).run()
+
+
 setup(name='netify',
       version='0.2',
       description='Turn boring things into something for the net.',
@@ -140,5 +153,7 @@ setup(name='netify',
           ],
       cmdclass={
           'pylint': PylintCommand,
-          'pep8': Pep8Command},
+          'pep8': Pep8Command,
+          'unittest': test,
+          'test': NetifyTest}
       )

@@ -4,8 +4,13 @@ netify change-log
 
 - **0.3**: TBD
 
-  - use distutils commands to run tests and code checkers. (Use ``python
-    setup.py pep8 pylint test`` instead of ``./style.sh``)
+  - use distutils commands to run tests and code checkers. The script
+    ``style.sh`` has been replaced with four setuptools commands:
+
+    - "pep8": run pep8 on all source files
+    - "pylint": run pylint on all source files
+    - "unittest": run available unittests in "netify.tests" package.
+    - "test": run the "pep8", "pylint" and "unittest" commands all together.
 
   - introduce unit testing framework
 

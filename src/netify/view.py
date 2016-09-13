@@ -64,6 +64,8 @@ class HelloWorld(NetifyView):
             body.stag('br')
             body.asis(build_debug_div(self.netify_app))
             body_txt = body.getvalue()
+            flash('Instance Path: %s' %
+                  self.netify_app.flask_app.instance_path)
         else:
             body_txt = hello_world
         flash('This is what a flashed message looks like: %s' % hello_world)

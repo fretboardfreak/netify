@@ -29,7 +29,34 @@ def readme():
         return readmef.read()
 
 
-class PylintCommand(Command):
+class NetifySetupCommand(Command):
+
+    def initialize_options(self):
+        """Set defaults for options"""
+        pass
+
+    def finalize_options(self):
+        """Post-process options."""
+        pass
+
+    def _run_command(self, command):
+        """Execute the command."""
+        self.announce('running command: %s' % str(command),
+                      level=distutils.log.INFO)
+        try:
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError as exc:
+            self.announce('Non-zero returncode "%s": %s' %
+                          (exc.returncode, exc.cmd),
+                          level=distutils.log.INFO)
+            return 1
+
+    @property
+    def netify_package(self):
+        return os.path.join(os.getcwd(), 'src/netify')
+
+
+class PylintCommand(NetifySetupCommand):
     """A custom command to run Pylint on all Python source files."""
 
     description = "Run pylint on the netify sources."
@@ -48,20 +75,12 @@ class PylintCommand(Command):
                 'Cannot find config file "%s"' % self.pylint_rcfile)
 
     def run(self):
-        """Run Pylint."""
+        """Prepare and run the Pylint command."""
         command = ['pylint']
         if self.pylint_rcfile:
             command.append('--rcfile=%s' % self.pylint_rcfile)
-        command.append(os.path.join(os.getcwd(), 'src/netify'))
-        self.announce('running command: %s' % str(command),
-                      level=distutils.log.INFO)
-        try:
-            subprocess.check_call(command)
-        except subprocess.CalledProcessError as exc:
-            self.announce('Non-zero returncode "%s": %s' %
-                          (exc.returncode, exc.cmd),
-                          level=distutils.log.INFO)
-            return 1
+        command.append(self.netify_package)
+        self._run_command(command)
 
 
 setup(name='netify',

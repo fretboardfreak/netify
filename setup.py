@@ -42,7 +42,7 @@ setup(name='netify',
       install_requires=required(),
       zip_safe=True,
       include_package_data=True,
-      test_suite = 'netify.tests',
+      test_suite='netify.tests',
       keywords='net netify app webapp html site website generator',
       classifiers=[
           'Development Status :: 3 - Alpha',

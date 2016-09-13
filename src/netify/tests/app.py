@@ -20,11 +20,14 @@ import netify.app as app
 
 
 class TestApp(TestCase):
+    """Tests for the netify.app module."""
     def create_app(self):
+        """Create an instance of the flask_app for the Flask Testing API."""
         netify = app.NetifyApp()
         return netify.flask_app
 
     def test_description(self):
+        """Verify the string description property of the netify object."""
         netify = app.NetifyApp()
         self.assertIsInstance(netify.description, str)
 

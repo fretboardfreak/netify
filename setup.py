@@ -12,7 +12,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import distutils.log
+from distutils.cmd import Command
 from setuptools import setup
+import os
+import subprocess
 
 
 def required():
@@ -23,6 +27,41 @@ def required():
 def readme():
     with open('README.rst', 'r') as readmef:
         return readmef.read()
+
+
+class PylintCommand(Command):
+    """A custom command to run Pylint on all Python source files."""
+
+    description = "Run pylint on the netify sources."
+    user_options = [
+        ('pylint-rcfile=', None, 'path to Pylint config file.')
+    ]
+
+    def initialize_options(self):
+        """Set defaults for options."""
+        self.pylint_rcfile = ''
+
+    def finalize_options(self):
+        """Post-process options."""
+        if self.pylint_rcfile:
+            assert os.path.exists(self.pylint_rcfile), (
+                'Cannot find config file "%s"' % self.pylint_rcfile)
+
+    def run(self):
+        """Run Pylint."""
+        command = ['pylint']
+        if self.pylint_rcfile:
+            command.append('--rcfile=%s' % self.pylint_rcfile)
+        command.append(os.path.join(os.getcwd(), 'src/netify'))
+        self.announce('running command: %s' % str(command),
+                      level=distutils.log.INFO)
+        try:
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError as exc:
+            self.announce('Non-zero returncode "%s": %s' %
+                          (exc.returncode, exc.cmd),
+                          level=distutils.log.INFO)
+            return 1
 
 
 setup(name='netify',
@@ -63,4 +102,5 @@ setup(name='netify',
           ('Topic :: Software Development :: Libraries :: '
            'Application Frameworks'),
           ],
+      cmdclass={'pylint': PylintCommand},
       )

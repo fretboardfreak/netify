@@ -4,6 +4,11 @@ netify change-log
 
 - **0.3**: TBD
 
+  - use distutils commands to run tests and code checkers. (Use ``python
+    setup.py pep8 pylint test`` instead of ``./style.sh``)
+
+  - introduce unit testing framework
+
   - additional tweaks and updates to the RawFile view.
 
     - sorted directory listing page.

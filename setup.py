@@ -83,6 +83,16 @@ class PylintCommand(NetifySetupCommand):
         self._run_command(command)
 
 
+class Pep8Command(NetifySetupCommand):
+    """A custom command to run Pep8 on all Python source files."""
+
+    description = "Run pep8 on all netify sources."
+    user_options = []
+
+    def run(self):
+        self._run_command(['pep8', '--statistics', '--verbose', self.netify_package])
+
+
 setup(name='netify',
       version='0.2',
       description='Turn boring things into something for the net.',
@@ -121,5 +131,7 @@ setup(name='netify',
           ('Topic :: Software Development :: Libraries :: '
            'Application Frameworks'),
           ],
-      cmdclass={'pylint': PylintCommand},
+      cmdclass={
+          'pylint': PylintCommand,
+          'pep8': Pep8Command},
       )

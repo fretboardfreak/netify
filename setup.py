@@ -20,9 +20,14 @@ import os
 import subprocess
 
 
-def required():
+def install_requires():
     with open('requirements.txt', 'r') as reqf:
         return reqf.read().splitlines()
+
+
+def tests_require():
+    with open('dev_requirements.txt', 'r') as dev_req:
+        return dev_req.read().splitlines()
 
 
 def readme():
@@ -108,10 +113,11 @@ setup(name='netify',
           'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
       },
       use_2to3=False,
-      install_requires=required(),
+      install_requires=install_requires(),
       zip_safe=True,
       include_package_data=True,
       test_suite='netify.tests',
+      tests_require=tests_require(),
       keywords='net netify app webapp html site website generator',
       classifiers=[
           'Development Status :: 3 - Alpha',

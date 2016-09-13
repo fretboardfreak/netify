@@ -15,6 +15,7 @@
 import distutils.log
 from distutils.cmd import Command
 from setuptools import setup
+from setuptools import find_packages
 import os
 import subprocess
 
@@ -102,7 +103,7 @@ setup(name='netify',
       author_email='curtissand@gmail.com',
       license='Apache',
       package_dir={'': 'src'},
-      packages=['netify'],
+      packages=find_packages('src'),
       entry_points={
           'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
       },

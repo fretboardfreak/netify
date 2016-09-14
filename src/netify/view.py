@@ -26,6 +26,7 @@ from yattag import Doc
 from .template import HtmlPage
 from .template import build_debug_div
 from .template import list_to_html_list
+from .template import make_header
 
 
 class NetifyView(FlaskView):
@@ -70,7 +71,7 @@ class HelloWorld(NetifyView):
             body_txt = hello_world
         flash('This is what a flashed message looks like: %s' % hello_world)
         flash_messages = self.page_options.get('flash_messages', False)
-        return HtmlPage(head=None, body=body_txt,
+        return HtmlPage(head=make_header(), body=body_txt,
                         flash_messages=flash_messages).render_template()
 
 

@@ -12,32 +12,35 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import os
+import subprocess
 import distutils.log
 from distutils.cmd import Command
 from setuptools import setup
 from setuptools import find_packages
 from setuptools.command.test import test
-import os
-import subprocess
 
 
 def install_requires():
+    '''Read the requirements for installing netify'''
     with open('requirements.txt', 'r') as reqf:
         return reqf.read().splitlines()
 
 
 def tests_require():
+    '''Read the requirements for te-ting netify.'''
     with open('dev_requirements.txt', 'r') as dev_req:
         return dev_req.read().splitlines()
 
 
 def readme():
+    '''Read the readme file for the long description.'''
     with open('README.rst', 'r') as readmef:
         return readmef.read()
 
 
 class NetifySetupCommand(Command):
-
+    '''Base command for distutils in netify.'''
     def initialize_options(self):
         """Set defaults for options"""
         pass
@@ -60,6 +63,7 @@ class NetifySetupCommand(Command):
 
     @property
     def netify_package(self):
+        '''Get the path to the netify parkace.'''
         return os.path.join(os.getcwd(), 'src/netify')
 
 
@@ -112,53 +116,54 @@ class NetifyTest(test):
     user_options = []
 
     def run(self):
+        '''Run all tests and checkers for netify.'''
         self.run_command('pep8')
         self.run_command('pylint')
         super(NetifyTest, self).run()
 
 
-setup(name='netify',
-      version='0.2',
-      description='Turn boring things into something for the net.',
-      long_description=readme(),
-      url='https://github.com/fretboardfreak/netify',
-      author='Curtis Sand',
-      author_email='curtissand@gmail.com',
-      license='Apache',
-      package_dir={'': 'src'},
-      packages=find_packages('src'),
-      entry_points={
-          'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
-      },
-      use_2to3=False,
-      install_requires=install_requires(),
-      zip_safe=True,
-      include_package_data=True,
-      test_suite='netify.tests',
-      tests_require=tests_require(),
-      keywords='net netify app webapp html site website generator',
-      classifiers=[
-          'Development Status :: 3 - Alpha',
-          'License :: OSI Approved :: Apache Software License',
-          'Intended Audience :: Developers',
-          'Framework :: Flask',
-          'Environment :: Web Environment',
-          'Operating System :: POSIX :: Linux',
-          'Operating System :: MacOS',
-          'Programming Language :: Python :: 3',
-          'Programming Language :: Python :: 3 :: Only',
-          'Topic :: Internet',
-          'Topic :: Internet :: WWW/HTTP',
-          'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
-          'Topic :: Internet :: WWW/HTTP :: Site Management',
-          'Topic :: Software Development',
-          'Topic :: Software Development :: Libraries',
-          ('Topic :: Software Development :: Libraries :: '
-           'Application Frameworks'),
-          ],
-      cmdclass={
-          'pylint': PylintCommand,
-          'pep8': Pep8Command,
-          'unittest': test,
-          'test': NetifyTest}
-      )
+setup(
+    name='netify',
+    version='0.2',
+    description='Turn boring things into something for the net.',
+    long_description=readme(),
+    url='https://github.com/fretboardfreak/netify',
+    author='Curtis Sand',
+    author_email='curtissand@gmail.com',
+    license='Apache',
+    package_dir={'': 'src'},
+    packages=find_packages('src'),
+    entry_points={
+        'console_scripts': ['netify=netify.app:NetifyApp.cli_main']
+    },
+    use_2to3=False,
+    install_requires=install_requires(),
+    zip_safe=True,
+    include_package_data=True,
+    test_suite='netify.tests',
+    tests_require=tests_require(),
+    keywords='net netify app webapp html site website generator',
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: Apache Software License',
+        'Intended Audience :: Developers',
+        'Framework :: Flask',
+        'Environment :: Web Environment',
+        'Operating System :: POSIX :: Linux',
+        'Operating System :: MacOS',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3 :: Only',
+        'Topic :: Internet',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Internet :: WWW/HTTP :: Site Management',
+        'Topic :: Software Development',
+        'Topic :: Software Development :: Libraries',
+        ('Topic :: Software Development :: Libraries :: '
+         'Application Frameworks'),
+    ],
+    cmdclass={
+        'pylint': PylintCommand,
+        'pep8': Pep8Command,
+        'unittest': test,
+        'test': NetifyTest})

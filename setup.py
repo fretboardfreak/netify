@@ -87,6 +87,7 @@ class PylintCommand(NetifySetupCommand):
         if self.pylint_rcfile:
             command.append('--rcfile=%s' % self.pylint_rcfile)
         command.append(self.netify_package)
+        command.append(os.path.join(os.getcwd(), 'setup.py'))
         self._run_command(command)
 
 
@@ -97,7 +98,11 @@ class Pep8Command(NetifySetupCommand):
     user_options = []
 
     def run(self):
-        self._run_command(['pep8', '--statistics', '--verbose', self.netify_package])
+        '''Run the pep8 checker.'''
+        self._run_command([
+            'pep8', '--statistics',
+            '--verbose', self.netify_package,
+            os.path.join(os.getcwd(), 'setup.py')])
 
 
 class NetifyTest(test):

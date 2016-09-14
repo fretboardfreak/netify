@@ -16,6 +16,7 @@ import abc
 
 from flask import Markup
 from flask import render_template_string
+from flask import url_for
 from yattag import Doc
 
 
@@ -178,3 +179,14 @@ def get_flashed_messages_div():
         doc.asis('{% endif %}')
         doc.asis('{% endwith %}')
     return doc.getvalue()
+
+
+def make_header():
+    """Make a header referencing a CSS style."""
+    header = Doc()
+    with header.tag('head'):
+        with header.tag('link'):
+            header.attr(href=url_for('static', filename='fret.css'))
+            header.attr(type='text/css')
+            header.attr(rel='stylesheet')
+    return header.getvalue()

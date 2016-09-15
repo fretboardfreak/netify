@@ -34,6 +34,7 @@ def render_template(template):
 
 class Page(abc.ABC):
     """Base object for pages."""
+
     @abc.abstractmethod
     def build(self):
         """Build and return the page template string."""
@@ -44,6 +45,7 @@ class Page(abc.ABC):
         return render_template(self.build())
 
     def __call__(self, *args, **kwargs):
+        """Helper method to shortcut the interface for building a Page."""
         self.__class__.__init__(self, *args, **kwargs)
         return self.build()
 
@@ -59,9 +61,11 @@ class HtmlPage(Page):
                  body section.
 
     """
+
     object_string_map = {'head': 'head_txt', 'body': 'body_txt'}
 
     def __init__(self, head=None, body=None, flash_messages=True):
+        """Create a new HtmlPage object."""
         if head is not None:
             self.head = head
         if body is not None:
@@ -82,6 +86,7 @@ class HtmlPage(Page):
                 setattr(self, self.object_string_map[obj_name], obj)
 
     def build(self):
+        """Build a yattag.Doc template."""
         if getattr(self, 'head', '') in ['', None]:
             self.head = Doc()
             self.head.stag('meta', charset='utf-8')
@@ -159,7 +164,7 @@ def build_debug_div(netify):
 
 
 def get_flashed_messages_div():
-    """Build and fill a div tag with any flashed messages.,
+    """Build and fill a div tag with any flashed messages.
 
     This is just a jinja2 template for retrieving flashed messages. The
     render_template method still needs to be called to get any messages

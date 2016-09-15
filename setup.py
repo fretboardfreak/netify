@@ -50,6 +50,12 @@ class NetifySetupCommand(Command):
         """Post-process options."""
         pass
 
+    def run(self):
+        """Run the custom netify command."""
+        if self.distribution.install_requires:
+            self.distribution.fetch_build_eggs(
+                self.distribution.install_requires)
+
     def _run_command(self, command):
         """Execute the command."""
         self.announce('running command: %s' % str(command),
@@ -68,7 +74,17 @@ class NetifySetupCommand(Command):
         return os.path.join(os.getcwd(), 'src/netify')
 
 
-class PylintCommand(NetifySetupCommand):
+class NetifyDevelopmentCommand(NetifySetupCommand):
+    """Base command for netify development and testing."""
+
+    def run(self):
+        """Run the custom netify dev/test command."""
+        super(NetifyDevelopmentCommand, self).run()
+        if self.distribution.tests_require:
+            self.distribution.fetch_build_eggs(self.distribution.tests_require)
+
+
+class PylintCommand(NetifyDevelopmentCommand):
     """A custom command to run Pylint on all Python source files."""
 
     description = "Run pylint on the netify sources."
@@ -88,13 +104,7 @@ class PylintCommand(NetifySetupCommand):
 
     def run(self):
         """Prepare and run the Pylint command."""
-        # Code borrowed from beginning of setuptools.command.test.test.run()
-        if self.distribution.install_requires:
-            self.distribution.fetch_build_eggs(
-                self.distribution.install_requires)
-        if self.distribution.tests_require:
-            self.distribution.fetch_build_eggs(self.distribution.tests_require)
-
+        super(PylintCommand, self).run()
         command = ['pylint']
         if self.pylint_rcfile:
             command.append('--rcfile=%s' % self.pylint_rcfile)
@@ -103,7 +113,7 @@ class PylintCommand(NetifySetupCommand):
         self._run_command(command)
 
 
-class Pep8Command(NetifySetupCommand):
+class Pep8Command(NetifyDevelopmentCommand):
     """A custom command to run Pep8 on all Python source files."""
 
     description = "Run pep8 on all netify sources."
@@ -111,13 +121,6 @@ class Pep8Command(NetifySetupCommand):
 
     def run(self):
         """Run the pep8 checker."""
-        # Code borrowed from beginning of setuptools.command.test.test.run()
-        if self.distribution.install_requires:
-            self.distribution.fetch_build_eggs(
-                self.distribution.install_requires)
-        if self.distribution.tests_require:
-            self.distribution.fetch_build_eggs(self.distribution.tests_require)
-
         self._run_command([
             'pep8', '--statistics',
             '--verbose', self.netify_package,

@@ -33,7 +33,8 @@ def guess_a_config_location():
 
 
 class Section(Enum):
-    """String names for the sections in the Netify config file"""
+    """String names for the sections in the Netify config file."""
+
     flask = 'flask'
     netify_views = 'netify_views'
     routes = 'routes'
@@ -41,10 +42,12 @@ class Section(Enum):
 
 class Config(object):
     """The config object providing access to Netify configuration."""
+
     _instance = None  # storage on the class for the singleton
     default_secret_key_size = 64  # 64 bytes => 512 bits
 
     def __init__(self, config_file):
+        """Open and read the configuration file from disk."""
         self.file = config_file
         self.parser = SafeConfigParser()
         if isinstance(self.file, (str, list)):
@@ -126,5 +129,6 @@ class Config(object):
 
 class FlaskDefaults(Enum):
     """Default values for the Flask section of the config file."""
+
     SECRET_KEY = Config.get_random_secret_key()
     LOGGER_NAME = 'netify'

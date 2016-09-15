@@ -69,9 +69,19 @@ class NetifySetupCommand(Command):
             return 1
 
     @property
+    def setup_path(self):
+        """Get the path to the setup.py script."""
+        return os.path.dirname(__file__)
+
+    @property
     def netify_package(self):
         """Get the path to the netify parkace."""
-        return os.path.join(os.getcwd(), 'src/netify')
+        return os.path.join(self.setup_path, 'src/netify')
+
+    @property
+    def test_paths(self):
+        """Get the list of paths for python files that should be tested."""
+        return [self.netify_package, __file__]
 
 
 class NetifyDevelopmentCommand(NetifySetupCommand):
@@ -108,35 +118,58 @@ class PylintCommand(NetifyDevelopmentCommand):
         command = ['pylint']
         if self.pylint_rcfile:
             command.append('--rcfile=%s' % self.pylint_rcfile)
-        command.append(self.netify_package)
-        command.append(os.path.join(os.getcwd(), 'setup.py'))
+        command.extend(self.test_paths)
         self._run_command(command)
 
 
 class Pep8Command(NetifyDevelopmentCommand):
-    """A custom command to run Pep8 on all Python source files."""
+    """A custom command to run pep8 on all Python source files."""
 
     description = "Run pep8 on all netify sources."
     user_options = []
 
     def run(self):
         """Run the pep8 checker."""
-        self._run_command([
-            'pep8', '--statistics',
-            '--verbose', self.netify_package,
-            os.path.join(os.getcwd(), 'setup.py')])
+        self._run_command(['pep8', '--statistics', '--verbose'] +
+                          self.test_paths)
+
+
+class Pep257Command(NetifyDevelopmentCommand):
+    """A custom command to run pep257 on all Python source files."""
+
+    description = "Run pep257 on all netify sources."
+    user_options = []
+
+    def run(self):
+        """Run the pep257 checker."""
+        self._run_command(['pep257', '--count', '--verbose'] +
+                          self.test_paths)
 
 
 class NetifyTest(test):
     """Combine unittest, pep8 and pylint checks all into one command."""
 
     description = "Run pep8, pylint and unittest commands together."
-    user_options = []
+    user_options = [('interactive', 'i', 'Enable interactive pauses.')]
+
+    def initialize_options(self):
+        """Set defaults for options."""
+        super(NetifyTest, self).initialize_options()
+        self.interactive = None
+
+    def _interactive_pause(self):
+        """Pause for the use to press enter. So interactive."""
+        if self.interactive:
+            input('enter to continue...')
 
     def run(self):
         """Run all tests and checkers for netify."""
         self.run_command('pep8')
+        self._interactive_pause()
+        self.run_command('pep257')
+        self._interactive_pause()
         self.run_command('pylint')
+        self._interactive_pause()
         super(NetifyTest, self).run()
 
 
@@ -184,4 +217,5 @@ setup(
         'pylint': PylintCommand,
         'pep8': Pep8Command,
         'unittest': test,
+        'pep257': Pep257Command,
         'test': NetifyTest})

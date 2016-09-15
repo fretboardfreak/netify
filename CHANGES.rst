@@ -4,6 +4,8 @@ netify change-log
 
 - **0.3**: TBD
 
+  - add the pep257 into the development workflow for better docstrings.
+
   - use distutils commands to run tests and code checkers. The script
     ``style.sh`` has been replaced with four setuptools commands:
 

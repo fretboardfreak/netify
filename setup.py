@@ -22,27 +22,28 @@ from setuptools.command.test import test
 
 
 def install_requires():
-    '''Read the requirements for installing netify'''
+    """Read the requirements for installing netify."""
     with open('requirements.txt', 'r') as reqf:
         return reqf.read().splitlines()
 
 
 def tests_require():
-    '''Read the requirements for te-ting netify.'''
+    """Read the requirements for testing netify."""
     with open('dev_requirements.txt', 'r') as dev_req:
         return dev_req.read().splitlines()
 
 
 def readme():
-    '''Read the readme file for the long description.'''
+    """Read the readme file for the long description."""
     with open('README.rst', 'r') as readmef:
         return readmef.read()
 
 
 class NetifySetupCommand(Command):
-    '''Base command for distutils in netify.'''
+    """Base command for distutils in netify."""
+
     def initialize_options(self):
-        """Set defaults for options"""
+        """Set defaults for options."""
         pass
 
     def finalize_options(self):
@@ -63,7 +64,7 @@ class NetifySetupCommand(Command):
 
     @property
     def netify_package(self):
-        '''Get the path to the netify parkace.'''
+        """Get the path to the netify parkace."""
         return os.path.join(os.getcwd(), 'src/netify')
 
 
@@ -109,7 +110,7 @@ class Pep8Command(NetifySetupCommand):
     user_options = []
 
     def run(self):
-        '''Run the pep8 checker.'''
+        """Run the pep8 checker."""
         # Code borrowed from beginning of setuptools.command.test.test.run()
         if self.distribution.install_requires:
             self.distribution.fetch_build_eggs(
@@ -130,7 +131,7 @@ class NetifyTest(test):
     user_options = []
 
     def run(self):
-        '''Run all tests and checkers for netify.'''
+        """Run all tests and checkers for netify."""
         self.run_command('pep8')
         self.run_command('pylint')
         super(NetifyTest, self).run()

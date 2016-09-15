@@ -24,6 +24,7 @@ from .config import guess_a_config_location
 
 class CliMixin(object):
     """A mixin that can be used to add a CLI front end to your Netify app."""
+
     @classmethod
     def cli_main(cls):
         """The main method for the Netify app, when called from the CLI."""
@@ -59,6 +60,7 @@ class CliMixin(object):
 
 class UwsgiMixin(object):
     """A mixin to add a main method that can be called with UWSGI."""
+
     @staticmethod
     def uwsgi_main(config_file):
         """The main method for the Netify app, when started via UWSGI."""
@@ -77,10 +79,12 @@ class NetifyCore(abc.ABC):
     Netify Application is configured it can be accessed by a piece of code
     simply by reinstanciating the App class.
     """
+
     flask_app = None
     netify_app = None
 
     def __init__(self, config=None):
+        """Create a new NetifyApp or retrieve the existing singleton."""
         if self.netify_app is None:  # First time init
             if self.flask_app is None:
                 self.__class__.flask_app = Flask(__name__)
@@ -134,4 +138,5 @@ class NetifyCore(abc.ABC):
 
 class NetifyApp(NetifyCore, CliMixin, UwsgiMixin):
     """An example Netify App composed of the Core and some Mixins."""
+
     description = "A basic Netify application with all the bells and whistles."

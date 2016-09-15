@@ -31,6 +31,7 @@ from .template import make_header
 
 class NetifyView(FlaskView):
     """A View class for use with Netify applications."""
+
     name = "netify_view"
     netify_app = None
 
@@ -48,6 +49,7 @@ class NetifyView(FlaskView):
 
 class HelloWorld(NetifyView):
     """A Hello World index view example with debugging output."""
+
     name = 'hello_world'
     route_base = '/'
 
@@ -77,6 +79,7 @@ class HelloWorld(NetifyView):
 
 class RawFile(NetifyView):
     """View a directy of files in raw form in your browser."""
+
     name = 'raw_file'
     route_base = '/raw_file'
 
@@ -213,5 +216,6 @@ class RawFile(NetifyView):
 
 class Views(Enum):
     """Enum of view classes available in this module."""
+
     hello_world = HelloWorld
     raw_file = RawFile

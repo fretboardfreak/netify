@@ -80,5 +80,18 @@ class TestNetifyCore(NetifyBaseTest):
         pass
 
 
+class TestUwsgiMixin(NetifyBaseTest):
+    """Verify the behaviour of the UWSGI main method."""
+
+    @patch('netify.config.Config.load_config')
+    @patch('netify.app.NetifyApp', spec=app.NetifyApp)
+    def test_uwsgi_main(self, mock_netify_app, mock_load_config):
+        """Check that the flask app is configured as expected."""
+        flask_app = app.UwsgiMixin.uwsgi_main('some/file/path')
+        self.assertTrue(mock_netify_app().register_views.called)
+        self.assertTrue(mock_load_config.called)
+        self.assertEqual(flask_app, mock_netify_app().flask_app)
+
+
 if __name__ == "__main__":
     main()

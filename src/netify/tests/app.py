@@ -17,20 +17,15 @@ from unittest import skip
 from unittest.mock import Mock
 from unittest.mock import patch
 
-from flask_testing import TestCase
-
 import netify
 import netify.app as app
 import netify.config as config
 
+from .base import NetifyBaseTest
 
-class TestNetifyCore(TestCase):
+
+class TestNetifyCore(NetifyBaseTest):
     """Tests for the netify.app module."""
-
-    def create_app(self):
-        """Create an instance of the flask_app for the Flask Testing API."""
-        napp = app.NetifyApp()
-        return napp.flask_app
 
     def test_singleton(self):
         """Verify that NetifyApp is a signleton."""

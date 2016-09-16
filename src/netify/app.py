@@ -89,6 +89,7 @@ class NetifyCore(abc.ABC):
             if self.flask_app is None:
                 self.__class__.flask_app = Flask(__name__)
                 self.registered_views = []
+            self.config = None
             self.__class__.netify_app = self
         else:
             self = self.__class__.netify_app

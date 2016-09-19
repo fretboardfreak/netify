@@ -12,13 +12,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from flask_testing import TestCase
+import unittest
+
+import flask_testing
 
 import netify.app as app
 
 
-class NetifyBaseTest(TestCase):
-    """Base test class for the netify.app module."""
+class BasicTest(unittest.TestCase):
+    """A base class for netify tests that do not require the netify app."""
+    pass
+
+
+class NetifyTest(flask_testing.TestCase):
+    """A base class for netify tests that require the netify/flask app."""
 
     def create_app(self):
         """Create an instance of the flask_app for the Flask Testing API."""

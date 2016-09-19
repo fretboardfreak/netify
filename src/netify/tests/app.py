@@ -21,10 +21,11 @@ import netify
 import netify.app as app
 import netify.config as config
 
-from .base import NetifyBaseTest
+from .base import NetifyTest
+from .base import BasicTest
 
 
-class TestNetifyCore(NetifyBaseTest):
+class TestNetifyCore(NetifyTest):
     """Tests for the netify.app module."""
 
     def test_singleton(self):
@@ -80,7 +81,7 @@ class TestNetifyCore(NetifyBaseTest):
         pass
 
 
-class TestUwsgiMixin(NetifyBaseTest):
+class TestUwsgiMixin(BasicTest):
     """Verify the behaviour of the UWSGI main method."""
 
     @patch('netify.config.Config.load_config')

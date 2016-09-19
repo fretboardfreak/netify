@@ -18,11 +18,12 @@ import abc
 
 import yattag
 
-from netify.tests.base import NetifyBaseTest
+from netify.tests.base import NetifyTest
+from netify.tests.base import BasicTest
 import netify.template as template
 
 
-class RenderTemplateTest(NetifyBaseTest):
+class RenderTemplateTest(BasicTest):
     """Test that the template module's methods work as expected."""
 
     @staticmethod
@@ -49,7 +50,7 @@ class RenderTemplateTest(NetifyBaseTest):
         mock_markup.assert_called_once_with(mock_rts(test_string))
 
 
-class PageTest(NetifyBaseTest):
+class PageTest(BasicTest):
     """Test the Page base class."""
 
     def test_is_abstract_base_class(self):

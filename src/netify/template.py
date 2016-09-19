@@ -75,7 +75,12 @@ class HtmlPage(Page):
         self.flash_messages = flash_messages
 
     def get_text(self):
-        """Convert possible yattag.Doc objects to strings."""
+        """Convert possible yattag.Doc objects to strings.
+
+        As a preliminary step in building the template string this method
+        converts the "self.head" and "self.body" contents into a string. If the
+        objects are already strings then this is a null operation.
+        """
         for obj_name in self.object_string_map:
             obj = getattr(self, obj_name, '')
             obj = '' if obj is None else obj
